@@ -139,7 +139,7 @@ export default function Home() {
             }
             disabled={!hasContent}
             type="button"
-            className="flex items-center gap-1.5 h-7 px-2.5 rounded-md text-[11px] font-medium text-white/45 hover:text-white/70 hover:bg-white/[0.07] transition-colors disabled:opacity-20 disabled:pointer-events-none"
+            className="flex items-center gap-1.5 h-7 px-2.5 rounded-md text-[11px] font-medium text-white/45 hover:text-white/70 hover:bg-white/[0.07] transition-colors disabled:opacity-30 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
           >
             <Download className="w-3.5 h-3.5" strokeWidth={2} />
             <span className="hidden sm:inline">Export</span>

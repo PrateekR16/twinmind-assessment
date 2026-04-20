@@ -83,7 +83,7 @@ export function ChatPanel({ messages, isStreaming, onSendMessage }: ChatPanelPro
                     ].join(" ")}
                   >
                     {msg.role === "assistant" && msg.content === "" ? (
-                      <span className="flex items-center gap-1 text-white/40 py-0.5">
+                      <span className="flex items-center gap-1 text-white/40 py-0.5" aria-hidden="true">
                         <span className="w-1.5 h-1.5 rounded-full bg-white/40 animate-bounce [animation-delay:0ms]" />
                         <span className="w-1.5 h-1.5 rounded-full bg-white/40 animate-bounce [animation-delay:120ms]" />
                         <span className="w-1.5 h-1.5 rounded-full bg-white/40 animate-bounce [animation-delay:240ms]" />
@@ -91,7 +91,7 @@ export function ChatPanel({ messages, isStreaming, onSendMessage }: ChatPanelPro
                     ) : (
                       <p className="whitespace-pre-wrap">{msg.content}</p>
                     )}
-                    <p className={`text-[10px] mt-1.5 tabular-nums ${msg.role === "user" ? "text-blue-300/50 text-right" : "text-white/30"}`}>
+                    <p className={`text-[10px] mt-1.5 tabular-nums ${msg.role === "user" ? "text-blue-300/50 text-right" : "text-white/35"}`}>
                       {new Date(msg.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
                     </p>
                   </div>
@@ -122,9 +122,9 @@ export function ChatPanel({ messages, isStreaming, onSendMessage }: ChatPanelPro
             disabled={!input.trim() || isStreaming}
             aria-label="Send message"
             className={[
-              "w-6 h-6 flex items-center justify-center rounded-lg shrink-0 transition-colors mb-px",
+              "w-6 h-6 flex items-center justify-center rounded-lg shrink-0 transition-colors mb-px focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/50",
               input.trim() && !isStreaming
-                ? "bg-blue-500/40 text-blue-200 hover:bg-blue-500/60 hover:text-white"
+                ? "bg-blue-500/40 text-blue-200 hover:bg-blue-500/60 hover:text-white active:bg-blue-500/70"
                 : "bg-white/[0.07] text-white/25",
             ].join(" ")}
           >

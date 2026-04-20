@@ -46,8 +46,8 @@ export function TranscriptPanel({
             <button
               onClick={onManualRefresh}
               type="button"
-              className="w-7 h-7 flex items-center justify-center rounded text-white/40 hover:text-emerald-400/80 hover:bg-emerald-500/10 transition-colors"
-              title="Flush chunk & refresh suggestions"
+              className="w-7 h-7 flex items-center justify-center rounded text-white/40 hover:text-emerald-400/80 hover:bg-emerald-500/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-400/50"
+              title="Flush chunk and refresh suggestions"
               aria-label="Flush chunk and refresh suggestions"
             >
               <RotateCcw className="w-3.5 h-3.5" strokeWidth={2} />
@@ -57,10 +57,10 @@ export function TranscriptPanel({
             onClick={isRecording ? onStopRecording : onStartRecording}
             type="button"
             className={[
-              "w-7 h-7 flex items-center justify-center rounded transition-colors",
+              "w-7 h-7 flex items-center justify-center rounded transition-colors focus-visible:outline-none focus-visible:ring-2",
               isRecording
-                ? "text-red-400/90 hover:text-red-400 hover:bg-red-500/10"
-                : "text-white/40 hover:text-emerald-400/80 hover:bg-emerald-500/10",
+                ? "text-red-400/90 hover:text-red-400 hover:bg-red-500/10 focus-visible:ring-red-400/50"
+                : "text-white/40 hover:text-emerald-400/80 hover:bg-emerald-500/10 focus-visible:ring-emerald-400/50",
             ].join(" ")}
             title={isRecording ? "Stop recording" : "Start recording"}
             aria-label={isRecording ? "Stop recording" : "Start recording"}
@@ -81,10 +81,10 @@ export function TranscriptPanel({
                 onClick={isRecording ? onStopRecording : onStartRecording}
                 type="button"
                 className={[
-                  "w-12 h-12 rounded-full flex items-center justify-center transition-colors",
+                  "w-12 h-12 rounded-full flex items-center justify-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-transparent",
                   isRecording
-                    ? "bg-red-500/15 text-red-400 hover:bg-red-500/25 ring-2 ring-red-500/30"
-                    : "bg-emerald-500/10 text-emerald-400/70 hover:bg-emerald-500/20 hover:text-emerald-400 ring-1 ring-emerald-500/30",
+                    ? "bg-red-500/15 text-red-400 hover:bg-red-500/25 ring-2 ring-red-500/30 active:bg-red-500/35 focus-visible:ring-red-400/60"
+                    : "bg-emerald-500/10 text-emerald-400/70 hover:bg-emerald-500/20 hover:text-emerald-400 ring-1 ring-emerald-500/30 active:bg-emerald-500/30 focus-visible:ring-emerald-400/60",
                 ].join(" ")}
                 aria-label={isRecording ? "Stop recording" : "Start recording"}
               >
@@ -92,9 +92,9 @@ export function TranscriptPanel({
                   ? <MicOff className="w-5 h-5" strokeWidth={1.75} />
                   : <Mic className="w-5 h-5" strokeWidth={1.75} />}
               </button>
-              <p className="text-[12px] text-white/40 text-center leading-relaxed whitespace-pre-line">
+              <p className="text-[13px] text-white/40 text-center leading-relaxed whitespace-pre-line">
                 {isRecording
-                  ? "Listening…\ntranscript appears every ~30s"
+                  ? "Listening…\nTranscript appears every ~30s"
                   : "Tap to start recording"}
               </p>
             </div>
@@ -121,7 +121,7 @@ export function TranscriptPanel({
       {/* Recording bar */}
       {isRecording && (
         <div className="flex items-center gap-2 px-4 py-2 border-t border-emerald-500/10 bg-emerald-500/[0.05] shrink-0">
-          <span className="relative flex h-1.5 w-1.5">
+          <span className="relative flex h-1.5 w-1.5" aria-hidden="true">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" />
             <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-emerald-500" />
           </span>

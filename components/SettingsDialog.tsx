@@ -48,7 +48,10 @@ export function SettingsDialog({ settings, onSave }: SettingsDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={handleOpen}>
-      <DialogTrigger aria-label="Open settings" className="w-8 h-8 flex items-center justify-center rounded-lg text-white/45 hover:text-white/75 hover:bg-white/[0.07] transition-colors">
+      <DialogTrigger
+        aria-label="Open settings"
+        className="w-8 h-8 flex items-center justify-center rounded-lg text-white/45 hover:text-white/75 hover:bg-white/[0.07] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
+      >
         <SlidersHorizontal className="w-4 h-4" strokeWidth={2} />
       </DialogTrigger>
 
@@ -71,17 +74,17 @@ export function SettingsDialog({ settings, onSave }: SettingsDialogProps) {
           </Field>
 
           <div className="grid grid-cols-3 gap-3">
-            <Field label="Chunk (s)">
+            <Field label="Chunk interval (s)">
               <input type="number" min={10} max={120} value={draft.chunkIntervalSeconds}
                 onChange={(e) => update("chunkIntervalSeconds", Number(e.target.value))}
                 className={inputCls} />
             </Field>
-            <Field label="Suggestion window (s)">
+            <Field label="Suggestion context (s)">
               <input type="number" min={30} max={600} value={draft.suggestionContextWindow}
                 onChange={(e) => update("suggestionContextWindow", Number(e.target.value))}
                 className={inputCls} />
             </Field>
-            <Field label="Answer window (chars)">
+            <Field label="Answer context (chars)">
               <input type="number" min={1000} max={80000} value={draft.answerContextWindow}
                 onChange={(e) => update("answerContextWindow", Number(e.target.value))}
                 className={inputCls} />
@@ -112,7 +115,7 @@ export function SettingsDialog({ settings, onSave }: SettingsDialogProps) {
           <button
             type="button"
             onClick={() => { onSave(draft); setOpen(false); }}
-            className="w-full h-9 rounded-lg bg-white/[0.07] border border-white/[0.08] text-white/60 hover:bg-white/[0.12] hover:text-white/80 text-[13px] font-medium transition-all"
+            className="w-full h-9 rounded-lg bg-white/[0.07] border border-white/[0.08] text-white/60 hover:bg-white/[0.12] hover:text-white/80 text-[13px] font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/30"
           >
             Save Settings
           </button>

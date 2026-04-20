@@ -4,12 +4,12 @@ import { RotateCcw, Loader2 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { SuggestionBatch, Suggestion, SuggestionType } from "@/types";
 
-const TYPE_CONFIG: Record<SuggestionType, { label: string; dot: string; border: string; hover: string }> = {
-  QUESTION:      { label: "Question",      dot: "bg-blue-400",    border: "border-l-blue-400/60",    hover: "hover:border-blue-400/50 hover:bg-blue-500/[0.07]" },
-  TALKING_POINT: { label: "Talking Point", dot: "bg-violet-400",  border: "border-l-violet-400/60",  hover: "hover:border-violet-400/50 hover:bg-violet-500/[0.07]" },
-  ANSWER:        { label: "Answer",        dot: "bg-emerald-400", border: "border-l-emerald-400/60", hover: "hover:border-emerald-400/50 hover:bg-emerald-500/[0.07]" },
-  FACT_CHECK:    { label: "Fact Check",    dot: "bg-amber-400",   border: "border-l-amber-400/60",   hover: "hover:border-amber-400/50 hover:bg-amber-500/[0.07]" },
-  CLARIFICATION: { label: "Clarification", dot: "bg-sky-400",     border: "border-l-sky-400/60",     hover: "hover:border-sky-400/50 hover:bg-sky-500/[0.07]" },
+const TYPE_CONFIG: Record<SuggestionType, { label: string; dot: string; border: string; hover: string; focus: string }> = {
+  QUESTION:      { label: "Question",      dot: "bg-blue-400",    border: "border-l-blue-400/60",    hover: "hover:border-blue-400/50 hover:bg-blue-500/[0.07]",    focus: "focus-visible:ring-blue-400/50" },
+  TALKING_POINT: { label: "Talking Point", dot: "bg-violet-400",  border: "border-l-violet-400/60",  hover: "hover:border-violet-400/50 hover:bg-violet-500/[0.07]", focus: "focus-visible:ring-violet-400/50" },
+  ANSWER:        { label: "Answer",        dot: "bg-emerald-400", border: "border-l-emerald-400/60", hover: "hover:border-emerald-400/50 hover:bg-emerald-500/[0.07]", focus: "focus-visible:ring-emerald-400/50" },
+  FACT_CHECK:    { label: "Fact Check",    dot: "bg-amber-400",   border: "border-l-amber-400/60",   hover: "hover:border-amber-400/50 hover:bg-amber-500/[0.07]",   focus: "focus-visible:ring-amber-400/50" },
+  CLARIFICATION: { label: "Clarification", dot: "bg-sky-400",     border: "border-l-sky-400/60",     hover: "hover:border-sky-400/50 hover:bg-sky-500/[0.07]",       focus: "focus-visible:ring-sky-400/50" },
 };
 
 interface SuggestionsPanelProps {
@@ -40,7 +40,7 @@ export function SuggestionsPanel({
           onClick={onRefresh}
           type="button"
           disabled={isFetching}
-          className="w-7 h-7 flex items-center justify-center rounded text-white/40 hover:text-violet-400/80 hover:bg-violet-500/10 transition-colors disabled:opacity-30 disabled:pointer-events-none"
+          className="w-7 h-7 flex items-center justify-center rounded text-white/40 hover:text-violet-400/80 hover:bg-violet-500/10 transition-colors disabled:opacity-30 disabled:pointer-events-none focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-violet-400/50"
           title="Refresh suggestions"
           aria-label="Refresh suggestions"
         >
@@ -49,9 +49,9 @@ export function SuggestionsPanel({
       </div>
 
       <ScrollArea className="flex-1 min-h-0">
-        <div className="px-3 py-4">
+        <div className="px-4 py-4">
           {batches.length === 0 ? (
-            <p className="text-white/40 text-[13px] leading-relaxed mt-6 text-center">
+            <p className="text-[13px] text-white/40 leading-relaxed mt-6 text-center">
               Suggestions appear automatically as you speak
             </p>
           ) : (
@@ -75,7 +75,9 @@ export function SuggestionsPanel({
                             "border-l-2 pl-3.5 pr-3.5 py-3",
                             cfg.border,
                             cfg.hover,
-                            "transition-colors duration-150",
+                            cfg.focus,
+                            "active:opacity-80",
+                            "transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2",
                           ].join(" ")}
                         >
                           <div className="flex items-center gap-1.5 mb-1.5">
