@@ -48,11 +48,11 @@ export function SettingsDialog({ settings, onSave }: SettingsDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={handleOpen}>
-      <DialogTrigger aria-label="Open settings" className="w-8 h-8 flex items-center justify-center rounded-lg text-white/30 hover:text-white/60 hover:bg-white/[0.06] transition-all">
-        <SlidersHorizontal className="w-[15px] h-[15px]" strokeWidth={1.75} />
+      <DialogTrigger aria-label="Open settings" className="w-8 h-8 flex items-center justify-center rounded-lg text-white/45 hover:text-white/75 hover:bg-white/[0.07] transition-colors">
+        <SlidersHorizontal className="w-4 h-4" strokeWidth={2} />
       </DialogTrigger>
 
-      <DialogContent className="max-w-xl bg-[#111115] border border-white/[0.08] text-white shadow-2xl max-h-[85vh] overflow-y-auto rounded-2xl">
+      <DialogContent className="w-[95vw] sm:max-w-xl md:max-w-2xl lg:max-w-3xl bg-[#111115] border border-white/[0.08] text-white shadow-2xl max-h-[85vh] overflow-y-auto rounded-2xl">
         <DialogHeader>
           <DialogTitle className="text-[14px] font-semibold text-white/70 tracking-tight">Settings</DialogTitle>
         </DialogHeader>
