@@ -4,7 +4,7 @@ A real-time meeting copilot: records mic audio in 30s chunks, transcribes via Gr
 
 ## Live Demo
 
-[Deploy URL — see Vercel deployment]
+**[https://twinmind-live-nine.vercel.app](https://twinmind-live-nine.vercel.app)**
 
 ## Setup
 
