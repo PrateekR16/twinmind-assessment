@@ -33,9 +33,10 @@ export function useSessionManager(settings: SessionSettings): UseSessionManagerR
   const [isTranscribing, setIsTranscribing] = useState(false);
   const [isChatStreaming, setIsChatStreaming] = useState(false);
 
-  // Keep a ref for latest chunks to avoid stale closure in callbacks
+  // Refs for latest state — avoids stale closures in async callbacks
   const chunksRef = useRef<TranscriptChunk[]>([]);
   const batchesRef = useRef<SuggestionBatch[]>([]);
+  const isFetchingRef = useRef(false);
 
   const getFullTranscript = useCallback(() => {
     return chunksRef.current.map((c) => c.text).join(" ");
@@ -89,10 +90,11 @@ export function useSessionManager(settings: SessionSettings): UseSessionManagerR
   );
 
   const fetchSuggestions = useCallback(async () => {
-    if (!settings.apiKey || isFetchingSuggestions) return;
+    if (!settings.apiKey || isFetchingRef.current) return;
     const recentTranscript = getRecentTranscript();
     if (!recentTranscript.trim()) return;
 
+    isFetchingRef.current = true;
     setIsFetchingSuggestions(true);
 
     const allPrevSuggestions = batchesRef.current
@@ -138,13 +140,13 @@ export function useSessionManager(settings: SessionSettings): UseSessionManagerR
       const detail = err instanceof Error ? err.message : String(err);
       showError("suggestions", detail);
     } finally {
+      isFetchingRef.current = false;
       setIsFetchingSuggestions(false);
     }
   }, [
     settings.apiKey,
     settings.suggestionSystemPrompt,
     settings.answerContextWindow,
-    isFetchingSuggestions,
     getRecentTranscript,
     getFullTranscript,
   ]);

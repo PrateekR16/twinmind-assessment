@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState, KeyboardEvent, ChangeEvent } from "react";
 import { ArrowUp, Loader2 } from "lucide-react";
+import ReactMarkdown from "react-markdown";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChatMessage } from "@/types";
 
@@ -89,7 +90,27 @@ export function ChatPanel({ messages, isStreaming, onSendMessage }: ChatPanelPro
                         <span className="w-1.5 h-1.5 rounded-full bg-white/40 animate-bounce [animation-delay:240ms]" />
                       </span>
                     ) : (
-                      <p className="whitespace-pre-wrap">{msg.content}</p>
+                      <ReactMarkdown
+                        components={{
+                          p: ({ children }) => <p className="mb-1.5 last:mb-0">{children}</p>,
+                          strong: ({ children }) => <strong className="font-semibold text-white/95">{children}</strong>,
+                          em: ({ children }) => <em className="italic">{children}</em>,
+                          ul: ({ children }) => <ul className="list-disc pl-4 mb-1.5 space-y-0.5">{children}</ul>,
+                          ol: ({ children }) => <ol className="list-decimal pl-4 mb-1.5 space-y-0.5">{children}</ol>,
+                          li: ({ children }) => <li className="leading-relaxed">{children}</li>,
+                          h1: ({ children }) => <p className="font-semibold text-white/90 mb-1">{children}</p>,
+                          h2: ({ children }) => <p className="font-semibold text-white/90 mb-1">{children}</p>,
+                          h3: ({ children }) => <p className="font-medium text-white/85 mb-0.5">{children}</p>,
+                          code: ({ children }) => <code className="bg-white/[0.08] rounded px-1 py-0.5 text-[12px] font-mono text-white/80">{children}</code>,
+                          pre: ({ children }) => <pre className="bg-white/[0.06] rounded-lg p-2.5 text-[12px] font-mono text-white/75 overflow-x-auto mb-1.5 leading-relaxed">{children}</pre>,
+                          table: ({ children }) => <div className="overflow-x-auto mb-1.5"><table className="text-[12px] border-collapse w-full">{children}</table></div>,
+                          th: ({ children }) => <th className="border border-white/[0.12] px-2 py-1 text-left font-semibold text-white/80 bg-white/[0.05]">{children}</th>,
+                          td: ({ children }) => <td className="border border-white/[0.10] px-2 py-1 text-white/70">{children}</td>,
+                          hr: () => <hr className="border-white/[0.10] my-2" />,
+                        }}
+                      >
+                        {msg.content}
+                      </ReactMarkdown>
                     )}
                     <p className={`text-[10px] mt-1.5 tabular-nums ${msg.role === "user" ? "text-blue-300/50 text-right" : "text-white/35"}`}>
                       {new Date(msg.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}

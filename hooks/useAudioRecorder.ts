@@ -23,11 +23,13 @@ export function useAudioRecorder({ chunkIntervalMs, onChunk }: UseAudioRecorderO
     const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
     streamRef.current = stream;
 
-    // Prefer webm (Chrome/Firefox) — Whisper accepts it directly
+    // Prefer webm (Chrome/Firefox), fall back to mp4 (Safari), then ogg
     const mimeType = MediaRecorder.isTypeSupported("audio/webm;codecs=opus")
       ? "audio/webm;codecs=opus"
       : MediaRecorder.isTypeSupported("audio/webm")
       ? "audio/webm"
+      : MediaRecorder.isTypeSupported("audio/mp4")
+      ? "audio/mp4"
       : "audio/ogg";
 
     const startNewRecorder = () => {
