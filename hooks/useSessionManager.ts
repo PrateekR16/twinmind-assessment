@@ -20,7 +20,7 @@ interface UseSessionManagerReturn {
   isChatStreaming: boolean;
   addTranscriptFromAudio: (blob: Blob) => Promise<void>;
   fetchSuggestions: () => Promise<void>;
-  sendChatMessage: (content: string) => Promise<void>;
+  sendChatMessage: (content: string, displayContent?: string) => Promise<void>;
   clearSession: () => void;
   fullTranscriptText: string;
 }
@@ -152,13 +152,15 @@ export function useSessionManager(settings: SessionSettings): UseSessionManagerR
   ]);
 
   const sendChatMessage = useCallback(
-    async (content: string) => {
+    async (content: string, displayContent?: string) => {
       if (!settings.apiKey || isChatStreaming) return;
 
+      // displayContent = what appears in the chat bubble (e.g. suggestion title)
+      // content        = what's sent to the API (may be a rich detail prompt)
       const userMsg: ChatMessage = {
         id: nanoid(),
         role: "user",
-        content,
+        content: displayContent ?? content,
         timestamp: Date.now(),
       };
 
@@ -175,8 +177,9 @@ export function useSessionManager(settings: SessionSettings): UseSessionManagerR
       setChatMessages((prev) => [...prev, assistantMsg]);
 
       const transcript = getFullTranscript().slice(-settings.answerContextWindow);
-      // Build history without the brand-new user message (it's sent separately)
-      const history = [...(chatMessages), userMsg].map((m) => ({
+      // Build history: previous messages use stored display content;
+      // current user message sends the full API content for context richness
+      const history = [...chatMessages, { role: "user" as const, content }].map((m) => ({
         role: m.role,
         content: m.content,
       }));

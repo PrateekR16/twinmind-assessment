@@ -80,9 +80,8 @@ export default function Home() {
         .replace("{suggestion_preview}", suggestion.preview)
         .replace("{detail_prompt}", suggestion.detail_prompt);
 
-      session.sendChatMessage(
-        `**${suggestion.title}**\n\n${suggestion.preview}\n\n---\n${prompt}`
-      );
+      // API receives full detail prompt; chat bubble shows title + preview only
+      session.sendChatMessage(prompt, `**${suggestion.title}**\n\n_${suggestion.preview}_`);
     },
     [settings, session]
   );

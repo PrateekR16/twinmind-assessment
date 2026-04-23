@@ -73,6 +73,7 @@ Generate 3 suggestions now. Respond with valid JSON only.`;
     return NextResponse.json({ suggestions: parsed.suggestions });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Suggestions failed";
-    return NextResponse.json({ error: message }, { status: 500 });
+    const status = message.includes("401") || message.toLowerCase().includes("invalid api key") ? 401 : 500;
+    return NextResponse.json({ error: message }, { status });
   }
 }

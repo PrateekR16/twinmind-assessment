@@ -74,8 +74,9 @@ export async function POST(req: NextRequest) {
     });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Chat failed";
+    const status = message.includes("401") || message.toLowerCase().includes("invalid api key") ? 401 : 500;
     return new Response(JSON.stringify({ error: message }), {
-      status: 500,
+      status,
       headers: { "Content-Type": "application/json" },
     });
   }

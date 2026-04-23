@@ -37,6 +37,7 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ text: transcription.text });
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Transcription failed";
-    return NextResponse.json({ error: message }, { status: 500 });
+    const status = message.includes("401") || message.toLowerCase().includes("invalid api key") ? 401 : 500;
+    return NextResponse.json({ error: message }, { status });
   }
 }
