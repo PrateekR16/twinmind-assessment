@@ -56,8 +56,10 @@ export function SuggestionsPanel({
             </p>
           ) : (
             <div className="space-y-5">
-              {batches.map((batch, batchIndex) => (
-                <div key={batch.id}>
+              {batches.map((batch, batchIndex) => {
+                const opacity = batchIndex === 0 ? "opacity-100" : batchIndex === 1 ? "opacity-50" : "opacity-25";
+                return (
+                <div key={batch.id} className={`transition-opacity duration-500 ${opacity}`}>
                   {batchIndex > 0 && <div className="h-px bg-white/[0.06] mb-5" />}
                   <p className="text-[10px] text-white/35 mb-2 px-1 tabular-nums">
                     {new Date(batch.timestamp).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}
@@ -97,7 +99,8 @@ export function SuggestionsPanel({
                     })}
                   </div>
                 </div>
-              ))}
+                );
+              })}
             </div>
           )}
         </div>
