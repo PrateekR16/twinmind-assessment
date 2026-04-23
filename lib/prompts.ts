@@ -30,13 +30,6 @@ What is the most concrete noun, number, or phrase in the recent transcript? Ever
 
 ## Step 2 — Select 3 diverse types
 
-Types:
-- ANSWER        — directly answers a question just asked
-- QUESTION      — the exact words to say as a smart follow-up
-- TALKING_POINT — a specific point worth raising; substance already in the preview
-- FACT_CHECK    — verifies or corrects a specific claim; states the correct fact in the preview
-- CLARIFICATION — resolves ambiguity; frames the exact question to ask
-
 HARD RULES:
 1. All 3 must be different types
 2. If a question was just asked → one MUST be ANSWER
@@ -48,10 +41,42 @@ SOFT RULES:
 - Verifiable claim made → prefer FACT_CHECK; put the correct fact in the preview
 - Last 30 seconds outweighs earlier context
 
+Type rules — what each must deliver:
+
+ANSWER (use when: a direct question was just asked)
+  Title: states the answer or key finding — give the answer, not "Answer to X"
+  Preview: the answer in 10–15 words — the core fact, verdict, or conclusion
+  ❌ "There are several ways to approach this problem"
+  ✅ "Managed Kafka at 1M events/day costs $8–15k/mo on AWS — budget accordingly"
+
+QUESTION (use when: a smart follow-up would unlock critical info or reveal hidden assumptions)
+  Title: starts with "Ask:" followed by the verbatim question to say
+  Preview: starts with "Ask:" — same or elaborated question, ending with what it reveals
+  ❌ "Ask about the team's capacity and timeline"
+  ✅ "Ask: 'Is the 3-month deadline to ship or to commit?' — changes build-vs-buy entirely"
+
+TALKING_POINT (use when: a specific insight is worth raising that hasn't been covered)
+  Title: states the point itself — the claim or finding, not the topic area
+  Preview: the concrete implication or evidence — why it matters right now, with specifics
+  ❌ "Discuss sharding options for the database"
+  ✅ "Sharding by user cohort breaks on viral spikes — Discord hit this at 2,500 guilds/shard"
+
+FACT_CHECK (use when: a specific verifiable claim was just made)
+  Title: states the correct fact or correction — not "this claim needs checking"
+  Preview: the verified fact with a number, comparison, or named source
+  ❌ "The claim about Kafka throughput may need verification"
+  ✅ "Kafka handles 1M+ msg/sec per broker — RabbitMQ caps at ~50k without clustering"
+
+CLARIFICATION (use when: something ambiguous is blocking the conversation from moving forward)
+  Title: starts with "Ask:" followed by the specific clarifying question
+  Preview: starts with "Ask:" — the question, then what gets unblocked when answered
+  ❌ "Clarify the project requirements before proceeding"
+  ✅ "Ask: 'Is this graded on architecture or working code?' — changes the whole build decision"
+
 ## Step 3 — Write substance-first
 
-Title (5–10 words): Contains the substance — the key finding, the exact question to ask, the specific trade-off. Never a topic label. QUESTION/CLARIFICATION titles start with "Ask:".
-Preview (10–15 words): Delivers the insight — a specific number, a verbatim phrase to say, a concrete trade-off with a clear direction. Not a description of what will be covered.
+Title (5–10 words): Contains the substance. See type rules above for format per type.
+Preview (10–15 words): Delivers the insight — specific number, verbatim phrase to say, concrete trade-off. Not a description of what will be covered.
 detail_prompt: Encode (a) what is already known from this conversation, (b) what specifically is needed, (c) the stakes or decision at hand.
 
 ## Step 4 — Specificity test (silent, no output)
@@ -128,6 +153,30 @@ Also verify: all 3 types different, no preview starting with "This / You could /
       "title": "If it's a differentiator, build; if it's table stakes, buy",
       "preview": "Name the constraint first — the answer follows from whether this feature is core IP.",
       "detail_prompt": "The build-vs-buy debate stalls when teams don't name the actual constraint. How do you facilitate the decision by asking: is this a competitive differentiator or infrastructure? What questions reveal which it is, and how does that answer resolve the debate without needing a full analysis?"
+    }
+  ]
+}
+
+### Academic/study — student just said "I want to implement agentic retrieval for my IR assignment but not sure if I should use LangChain or build from scratch"
+{
+  "suggestions": [
+    {
+      "type": "CLARIFICATION",
+      "title": "Ask: 'Is the assignment graded on architecture or working code?'",
+      "preview": "Ask: 'Deliverable type — design doc or runnable demo — changes the build choice entirely.'",
+      "detail_prompt": "The student needs to choose LangChain vs. scratch but hasn't clarified what the assignment requires. What questions clarify the deliverable — architecture diagram, working code, evaluation metrics — and how does the answer determine whether abstraction libraries are appropriate or whether scratch implementation is expected to demonstrate conceptual understanding?"
+    },
+    {
+      "type": "TALKING_POINT",
+      "title": "LangChain ships fast but graders want proof you understand the loop",
+      "preview": "Scratch implementation signals deeper RAG understanding; LangChain risks hiding the concepts.",
+      "detail_prompt": "The student is choosing between LangChain and scratch for an IR assignment. What are the pedagogical trade-offs — LangChain ships faster but may obscure retrieval mechanics, while scratch demonstrates embedding, indexing, and re-ranking understanding? How should the student frame their choice in the write-up regardless of which they pick, to show conceptual depth either way?"
+    },
+    {
+      "type": "FACT_CHECK",
+      "title": "Agentic RAG adds query-rewrite loops — not just retrieve-then-generate",
+      "preview": "Agents reformulate queries 2–4x per answer; vanilla RAG does one retrieval pass.",
+      "detail_prompt": "The student mentioned 'agentic information retrieval' — clarify what this actually means vs. standard RAG. What is the agentic retrieval loop (query reformulation, relevance evaluation, iterative retrieval), how does it differ from vanilla RAG, and what evaluation metrics (MRR, NDCG, answer faithfulness) would a grader expect for an agentic IR implementation?"
     }
   ]
 }
