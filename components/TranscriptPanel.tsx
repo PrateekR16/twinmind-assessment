@@ -34,7 +34,7 @@ export function TranscriptPanel({
       <div className="flex items-center justify-between px-4 h-12 border-b border-white/[0.06] shrink-0">
         <div className="flex items-center gap-2 min-w-0">
           <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 shrink-0" />
-          <span className="text-[11px] font-semibold uppercase tracking-widest text-emerald-300/80 truncate">
+          <span className="text-[12px] font-bold uppercase tracking-widest text-emerald-300 truncate">
             Transcript
           </span>
           {isTranscribing && (
@@ -109,7 +109,7 @@ export function TranscriptPanel({
                       second: "2-digit",
                     })}
                   </p>
-                  <p className="text-[13px] text-white/80 leading-relaxed">{chunk.text}</p>
+                  <p className="text-[13px] text-white/90 leading-relaxed">{chunk.text}</p>
                 </div>
               ))}
             </div>

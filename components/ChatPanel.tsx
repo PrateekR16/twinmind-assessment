@@ -54,7 +54,7 @@ export function ChatPanel({ messages, isStreaming, onSendMessage }: ChatPanelPro
       <div className="flex items-center justify-between px-4 h-12 border-b border-white/[0.06] shrink-0">
         <div className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-blue-400 shrink-0" />
-          <span className="text-[11px] font-semibold uppercase tracking-widest text-blue-300/80">
+          <span className="text-[12px] font-bold uppercase tracking-widest text-blue-300">
             Chat
           </span>
           {isStreaming && <Loader2 className="w-3.5 h-3.5 text-blue-400/70 animate-spin" aria-hidden="true" strokeWidth={2} />}
@@ -80,7 +80,7 @@ export function ChatPanel({ messages, isStreaming, onSendMessage }: ChatPanelPro
                       "max-w-[88%] rounded-2xl px-3.5 py-2.5 text-[13px] leading-relaxed",
                       msg.role === "user"
                         ? "bg-blue-500/[0.18] text-white/90 rounded-br-sm border border-blue-500/[0.18]"
-                        : "bg-white/[0.05] text-white/80 rounded-bl-sm border border-white/[0.08]",
+                        : "bg-white/[0.05] text-white/85 rounded-bl-sm border border-white/[0.08]",
                     ].join(" ")}
                   >
                     {msg.role === "assistant" && msg.content === "" ? (
@@ -135,7 +135,7 @@ export function ChatPanel({ messages, isStreaming, onSendMessage }: ChatPanelPro
             placeholder="Ask a question…"
             aria-label="Chat message input"
             style={{ height: "24px" }}
-            className="flex-1 bg-transparent text-[13px] text-white/85 placeholder:text-white/35 resize-none outline-none leading-relaxed overflow-y-auto"
+            className="flex-1 bg-transparent text-[13px] text-white/90 placeholder:text-white/35 resize-none outline-none leading-relaxed overflow-y-auto"
           />
           <button
             onClick={handleSend}

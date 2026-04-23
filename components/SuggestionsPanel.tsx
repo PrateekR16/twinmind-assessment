@@ -5,11 +5,11 @@ import { ScrollArea } from "@/components/ui/scroll-area";
 import { SuggestionBatch, Suggestion, SuggestionType } from "@/types";
 
 const TYPE_CONFIG: Record<SuggestionType, { label: string; dot: string; border: string; hover: string; focus: string }> = {
-  QUESTION:      { label: "Question",      dot: "bg-blue-400",    border: "border-l-blue-400/60",    hover: "hover:border-blue-400/50 hover:bg-blue-500/[0.07]",    focus: "focus-visible:ring-blue-400/50" },
-  TALKING_POINT: { label: "Talking Point", dot: "bg-violet-400",  border: "border-l-violet-400/60",  hover: "hover:border-violet-400/50 hover:bg-violet-500/[0.07]", focus: "focus-visible:ring-violet-400/50" },
-  ANSWER:        { label: "Answer",        dot: "bg-emerald-400", border: "border-l-emerald-400/60", hover: "hover:border-emerald-400/50 hover:bg-emerald-500/[0.07]", focus: "focus-visible:ring-emerald-400/50" },
-  FACT_CHECK:    { label: "Fact Check",    dot: "bg-amber-400",   border: "border-l-amber-400/60",   hover: "hover:border-amber-400/50 hover:bg-amber-500/[0.07]",   focus: "focus-visible:ring-amber-400/50" },
-  CLARIFICATION: { label: "Clarification", dot: "bg-sky-400",     border: "border-l-sky-400/60",     hover: "hover:border-sky-400/50 hover:bg-sky-500/[0.07]",       focus: "focus-visible:ring-sky-400/50" },
+  QUESTION:      { label: "Question",      dot: "bg-blue-400",    border: "border-l-blue-400/80",    hover: "hover:border-blue-400/60 hover:bg-blue-500/[0.07]",    focus: "focus-visible:ring-blue-400/50" },
+  TALKING_POINT: { label: "Talking Point", dot: "bg-violet-400",  border: "border-l-violet-400/80",  hover: "hover:border-violet-400/60 hover:bg-violet-500/[0.07]", focus: "focus-visible:ring-violet-400/50" },
+  ANSWER:        { label: "Answer",        dot: "bg-emerald-400", border: "border-l-emerald-400/80", hover: "hover:border-emerald-400/60 hover:bg-emerald-500/[0.07]", focus: "focus-visible:ring-emerald-400/50" },
+  FACT_CHECK:    { label: "Fact Check",    dot: "bg-amber-400",   border: "border-l-amber-400/80",   hover: "hover:border-amber-400/60 hover:bg-amber-500/[0.07]",   focus: "focus-visible:ring-amber-400/50" },
+  CLARIFICATION: { label: "Clarification", dot: "bg-sky-400",     border: "border-l-sky-400/80",     hover: "hover:border-sky-400/60 hover:bg-sky-500/[0.07]",       focus: "focus-visible:ring-sky-400/50" },
 };
 
 interface SuggestionsPanelProps {
@@ -31,7 +31,7 @@ export function SuggestionsPanel({
       <div className="flex items-center justify-between px-4 h-12 border-b border-white/[0.06] shrink-0">
         <div className="flex items-center gap-2">
           <span className="w-1.5 h-1.5 rounded-full bg-violet-400 shrink-0" />
-          <span className="text-[11px] font-semibold uppercase tracking-widest text-violet-300/80">
+          <span className="text-[12px] font-bold uppercase tracking-widest text-violet-300">
             Suggestions
           </span>
           {isFetching && <Loader2 className="w-3.5 h-3.5 text-violet-400/70 animate-spin" aria-hidden="true" strokeWidth={2} />}
@@ -84,14 +84,14 @@ export function SuggestionsPanel({
                         >
                           <div className="flex items-center gap-1.5 mb-1.5">
                             <span className={`w-1.5 h-1.5 rounded-full shrink-0 ${cfg.dot}`} />
-                            <span className="text-[10px] font-semibold uppercase tracking-wider text-white/40">
+                            <span className="text-[10px] font-semibold uppercase tracking-wider text-white/55">
                               {cfg.label}
                             </span>
                           </div>
-                          <p className="text-[13px] font-medium text-white/85 leading-snug mb-1">
+                          <p className="text-[13px] font-medium text-white/90 leading-snug mb-1">
                             {s.title}
                           </p>
-                          <p className="text-[12px] text-white/50 leading-relaxed">
+                          <p className="text-[12px] text-white/65 leading-relaxed">
                             {s.preview}
                           </p>
                         </button>
