@@ -65,7 +65,7 @@ Why hybrid over alternatives:
 - *Pure CoT* (visible reasoning) wastes output tokens every request — at 6,000 TPM, visible reasoning isn't affordable
 - *Pure few-shot* without role framing loses the "deliver insight" mental model on edge-case inputs
 
-The silent CoT steps are the key insight: Steps 1 and 4 are labeled "(silent, no output)" — the model does the reasoning internally without generating tokens.
+The silent CoT steps are the key insight: reasoning happens internally, without consuming output tokens that count against the 6,000 TPM limit.
 
 ---
 
