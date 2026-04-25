@@ -4,6 +4,8 @@ Real-time meeting copilot. Records mic audio, transcribes via Groq Whisper Large
 
 **[Live demo](https://twinmind-live-nine.vercel.app)**
 
+![TwinMind Live — 3-column meeting copilot interface](public/screenshot.png)
+
 ---
 
 ## What it does
