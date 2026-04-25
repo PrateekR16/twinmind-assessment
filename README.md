@@ -84,8 +84,6 @@ Technically it is a hybrid pattern: role-based identity, bad/good calibration pa
 
 ## What I would build next
 
-**VAD gate.** An amplitude check before sending a chunk to Whisper would eliminate hallucination transcripts. The architecture does not need to change, just the upload gate in `useAudioRecorder`.
-
 **Multi-speaker diarization.** Attribute transcript lines to speaker A or B. Suggestions become speaker-aware and "you said X, they said Y" is more useful than an unlabeled transcript.
 
 **Persistent sessions.** IndexedDB for in-browser history with optional export to Notion or Markdown. The stateless architecture makes this an additive change.
