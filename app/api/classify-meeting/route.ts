@@ -39,9 +39,10 @@ export async function POST(req: NextRequest) {
       response_format: { type: "json_object" as const },
     };
 
-    const completion = await groq.chat.completions.create(
+    // Cast params to non-streaming overload — response_format + no stream = ChatCompletion
+    const completion = await (groq.chat.completions.create(
       completionParams as Parameters<typeof groq.chat.completions.create>[0]
-    );
+    ) as Promise<{ choices: Array<{ message: { content: string | null } }> }>);
 
     const raw = completion.choices[0]?.message?.content ?? '{"type":"general"}';
     const parsed = JSON.parse(raw) as { type?: string };
