@@ -106,6 +106,7 @@ export default function Home() {
       isFetching={session.isFetchingSuggestions}
       onRefresh={session.fetchSuggestions}
       onSuggestionClick={handleSuggestionClick}
+      detectedMeetingType={session.detectedMeetingType}
     />
   );
 

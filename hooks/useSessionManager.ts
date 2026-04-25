@@ -9,6 +9,7 @@ import {
   Suggestion,
   ChatMessage,
   SessionSettings,
+  MeetingType,
 } from "@/types";
 
 interface UseSessionManagerReturn {
@@ -23,6 +24,7 @@ interface UseSessionManagerReturn {
   sendChatMessage: (content: string, displayContent?: string) => Promise<void>;
   clearSession: () => void;
   fullTranscriptText: string;
+  detectedMeetingType: MeetingType;
 }
 
 export function useSessionManager(settings: SessionSettings): UseSessionManagerReturn {
@@ -38,6 +40,11 @@ export function useSessionManager(settings: SessionSettings): UseSessionManagerR
   const batchesRef = useRef<SuggestionBatch[]>([]);
   const isFetchingRef = useRef(false);
 
+  // Meeting type classification — detected after chunk 2, fires once per session
+  const [detectedMeetingType, setDetectedMeetingType] = useState<MeetingType>("general");
+  const detectedMeetingTypeRef = useRef<MeetingType>("general");
+  const hasClassifiedRef = useRef(false);
+
   const getFullTranscript = useCallback(() => {
     return chunksRef.current.map((c) => c.text).join(" ");
   }, []);
@@ -49,6 +56,37 @@ export function useSessionManager(settings: SessionSettings): UseSessionManagerR
     const source = recent.length > 0 ? recent : chunksRef.current.slice(-6);
     return source.map((c) => c.text).join(" ");
   }, [settings.suggestionContextWindow]);
+
+  const classifyMeeting = useCallback(async () => {
+    if (hasClassifiedRef.current || !settings.apiKey) return;
+    hasClassifiedRef.current = true; // fire once per session
+
+    const excerpt = chunksRef.current.slice(0, 2).map((c) => c.text).join(" ");
+    if (!excerpt.trim()) return;
+
+    try {
+      const res = await fetch("/api/classify-meeting", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "x-api-key": settings.apiKey,
+        },
+        body: JSON.stringify({ transcript: excerpt }),
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      if (data.type) {
+        detectedMeetingTypeRef.current = data.type as MeetingType;
+        setDetectedMeetingType(data.type as MeetingType);
+      }
+    } catch {
+      // Non-fatal — stays "general"
+    }
+  }, [settings.apiKey]);
+
+  // Ref wrapper so addTranscriptFromAudio doesn't need classifyMeeting in its deps
+  const classifyMeetingRef = useRef<() => Promise<void>>(() => Promise.resolve());
+  classifyMeetingRef.current = classifyMeeting;
 
   const addTranscriptFromAudio = useCallback(
     async (blob: Blob) => {
@@ -79,6 +117,11 @@ export function useSessionManager(settings: SessionSettings): UseSessionManagerR
           chunksRef.current = updated;
           return updated;
         });
+
+        const chunkCount = chunksRef.current.length;
+        if (chunkCount === 2) {
+          classifyMeetingRef.current(); // fire-and-forget — non-blocking
+        }
       } catch (err) {
         const detail = err instanceof Error ? err.message : String(err);
         showError("transcription", detail);
@@ -114,6 +157,7 @@ export function useSessionManager(settings: SessionSettings): UseSessionManagerR
           fullTranscript: getFullTranscript().slice(-settings.answerContextWindow),
           previousSuggestions: allPrevSuggestions,
           systemPrompt: settings.suggestionSystemPrompt,
+          meetingType: detectedMeetingTypeRef.current,
         }),
       });
 
@@ -249,6 +293,9 @@ export function useSessionManager(settings: SessionSettings): UseSessionManagerR
     setChatMessages([]);
     chunksRef.current = [];
     batchesRef.current = [];
+    setDetectedMeetingType("general");
+    detectedMeetingTypeRef.current = "general";
+    hasClassifiedRef.current = false;
   }, []);
 
   return {
@@ -263,5 +310,6 @@ export function useSessionManager(settings: SessionSettings): UseSessionManagerR
     sendChatMessage,
     clearSession,
     fullTranscriptText: getFullTranscript(),
+    detectedMeetingType,
   };
 }

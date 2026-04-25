@@ -26,6 +26,14 @@ export interface ChatMessage {
   timestamp: number;
 }
 
+export type MeetingType =
+  | "general"
+  | "technical"
+  | "interview"
+  | "sales"
+  | "planning"
+  | "learning";
+
 export interface SessionSettings {
   apiKey: string;
   suggestionSystemPrompt: string;

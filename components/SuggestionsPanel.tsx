@@ -2,7 +2,7 @@
 
 import { RotateCcw, Loader2 } from "lucide-react";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { SuggestionBatch, Suggestion, SuggestionType } from "@/types";
+import { MeetingType, SuggestionBatch, Suggestion, SuggestionType } from "@/types";
 
 const TYPE_CONFIG: Record<SuggestionType, { label: string; dot: string; border: string; hover: string; focus: string }> = {
   QUESTION:      { label: "Question",      dot: "bg-blue-400",    border: "border-l-blue-400/80",    hover: "hover:border-blue-400/60 hover:bg-blue-500/[0.07]",    focus: "focus-visible:ring-blue-400/50" },
@@ -17,6 +17,7 @@ interface SuggestionsPanelProps {
   isFetching: boolean;
   onRefresh: () => void;
   onSuggestionClick: (suggestion: Suggestion) => void;
+  detectedMeetingType?: MeetingType;
 }
 
 export function SuggestionsPanel({
@@ -24,6 +25,7 @@ export function SuggestionsPanel({
   isFetching,
   onRefresh,
   onSuggestionClick,
+  detectedMeetingType,
 }: SuggestionsPanelProps) {
   return (
     <div className="flex flex-col h-full">
@@ -34,6 +36,11 @@ export function SuggestionsPanel({
           <span className="text-[12px] font-bold uppercase tracking-widest text-violet-300">
             Suggestions
           </span>
+          {detectedMeetingType && detectedMeetingType !== "general" && (
+            <span className="text-[9px] font-medium uppercase tracking-wider text-violet-400/40 border border-violet-400/20 px-1.5 py-0.5 rounded">
+              {detectedMeetingType}
+            </span>
+          )}
           {isFetching && <Loader2 className="w-3.5 h-3.5 text-violet-400/70 animate-spin" aria-hidden="true" strokeWidth={2} />}
         </div>
         <button
