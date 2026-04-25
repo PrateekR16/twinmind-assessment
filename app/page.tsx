@@ -43,7 +43,7 @@ export default function Home() {
   useEffect(() => {
     if (isRecording) {
       autoRefreshRef.current = setInterval(() => {
-        session.fetchSuggestions();
+        session.triggerSuggestionsIfNew();
       }, settings.chunkIntervalSeconds * 1000);
     } else {
       if (autoRefreshRef.current) {

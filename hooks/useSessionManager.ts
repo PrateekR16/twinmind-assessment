@@ -21,6 +21,7 @@ interface UseSessionManagerReturn {
   isChatStreaming: boolean;
   addTranscriptFromAudio: (blob: Blob) => Promise<void>;
   fetchSuggestions: () => Promise<void>;
+  triggerSuggestionsIfNew: () => Promise<void>;
   sendChatMessage: (content: string, displayContent?: string) => Promise<void>;
   clearSession: () => void;
   fullTranscriptText: string;
@@ -39,6 +40,8 @@ export function useSessionManager(settings: SessionSettings): UseSessionManagerR
   const chunksRef = useRef<TranscriptChunk[]>([]);
   const batchesRef = useRef<SuggestionBatch[]>([]);
   const isFetchingRef = useRef(false);
+  const lastSuggestedChunkCountRef = useRef<number>(0);
+  const triggerSuggestionsIfNewRef = useRef<() => Promise<void>>(() => Promise.resolve());
 
   // Meeting type classification — detected after chunk 2, fires once per session
   const [detectedMeetingType, setDetectedMeetingType] = useState<MeetingType>("general");
@@ -120,6 +123,10 @@ export function useSessionManager(settings: SessionSettings): UseSessionManagerR
           return updated;
         });
         if (shouldClassify) classifyMeetingRef.current(); // fire-and-forget — non-blocking
+        // Trigger suggestions after each new chunk — gated by new-content check
+        setTimeout(() => {
+          triggerSuggestionsIfNewRef.current();
+        }, 50); // 50ms lets React state settle
       } catch (err) {
         const detail = err instanceof Error ? err.message : String(err);
         showError("transcription", detail);
@@ -192,6 +199,17 @@ export function useSessionManager(settings: SessionSettings): UseSessionManagerR
     getRecentTranscript,
     getFullTranscript,
   ]);
+
+  const triggerSuggestionsIfNew = useCallback(async () => {
+    const currentCount = chunksRef.current.length;
+    if (currentCount === 0) return;
+    if (currentCount <= lastSuggestedChunkCountRef.current) return; // no new content since last batch
+    await fetchSuggestions();
+    lastSuggestedChunkCountRef.current = chunksRef.current.length;
+  }, [fetchSuggestions]);
+
+  // Keep ref in sync to avoid stale closures when called from addTranscriptFromAudio
+  triggerSuggestionsIfNewRef.current = triggerSuggestionsIfNew;
 
   const sendChatMessage = useCallback(
     async (content: string, displayContent?: string) => {
@@ -291,6 +309,7 @@ export function useSessionManager(settings: SessionSettings): UseSessionManagerR
     setChatMessages([]);
     chunksRef.current = [];
     batchesRef.current = [];
+    lastSuggestedChunkCountRef.current = 0;
     setDetectedMeetingType("general");
     detectedMeetingTypeRef.current = "general";
     hasClassifiedRef.current = false;
@@ -305,6 +324,7 @@ export function useSessionManager(settings: SessionSettings): UseSessionManagerR
     isChatStreaming,
     addTranscriptFromAudio,
     fetchSuggestions,
+    triggerSuggestionsIfNew,
     sendChatMessage,
     clearSession,
     fullTranscriptText: getFullTranscript(),
