@@ -5,7 +5,6 @@ import { MEETING_TYPE_CONTEXT } from "@/lib/prompts";
 
 interface SuggestionsBody {
   recentTranscript: string;
-  fullTranscript: string;
   previousSuggestions: Pick<Suggestion, "title" | "type">[];
   systemPrompt: string;
   meetingType?: MeetingType;

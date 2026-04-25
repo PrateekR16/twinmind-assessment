@@ -1,4 +1,4 @@
-import { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import Groq from "groq-sdk";
 
 interface ChatMessage {
@@ -15,17 +15,14 @@ interface ChatBody {
 export async function POST(req: NextRequest) {
   const apiKey = req.headers.get("x-api-key");
   if (!apiKey) {
-    return new Response(JSON.stringify({ error: "Missing API key" }), {
-      status: 401,
-      headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json({ error: "Missing API key" }, { status: 401 });
   }
 
   let body: ChatBody;
   try {
     body = await req.json();
   } catch {
-    return new Response(JSON.stringify({ error: "Invalid JSON" }), { status: 400 });
+    return NextResponse.json({ error: "Invalid JSON" }, { status: 400 });
   }
 
   const { messages, transcript, systemPrompt } = body;
@@ -75,9 +72,6 @@ export async function POST(req: NextRequest) {
   } catch (err: unknown) {
     const message = err instanceof Error ? err.message : "Chat failed";
     const status = message.includes("401") || message.toLowerCase().includes("invalid api key") ? 401 : 500;
-    return new Response(JSON.stringify({ error: message }), {
-      status,
-      headers: { "Content-Type": "application/json" },
-    });
+    return NextResponse.json({ error: message }, { status });
   }
 }

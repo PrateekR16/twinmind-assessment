@@ -96,7 +96,7 @@ export function useSessionManager(settings: SessionSettings): UseSessionManagerR
       if (!settings.apiKey) return;
       setIsTranscribing(true);
 
-      const prevText = chunksRef.current.slice(-1)[0]?.text ?? "";
+      const prevText = chunksRef.current.at(-1)?.text ?? "";
       const form = new FormData();
       form.append("audio", blob, "audio.webm");
       form.append("prev_text", prevText);
@@ -159,7 +159,6 @@ export function useSessionManager(settings: SessionSettings): UseSessionManagerR
         },
         body: JSON.stringify({
           recentTranscript,
-          fullTranscript: getFullTranscript().slice(-settings.answerContextWindow),
           previousSuggestions: allPrevSuggestions,
           systemPrompt: settings.suggestionSystemPrompt,
           meetingType: detectedMeetingTypeRef.current,
