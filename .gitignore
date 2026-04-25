@@ -42,3 +42,12 @@ next-env.d.ts
 
 # Internal Claude tooling
 .claude/
+
+# Internal workflow / tooling docs (not part of submission)
+AGENTS.md
+CLAUDE.md
+skills-lock.json
+twinmind-model-reference.md
+twinmind-skills-setup.md
+apikey.md
+docs/superpowers/
