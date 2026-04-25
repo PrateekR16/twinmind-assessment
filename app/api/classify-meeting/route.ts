@@ -28,19 +28,22 @@ export async function POST(req: NextRequest) {
   const groq = new Groq({ apiKey });
 
   try {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const completion = await groq.chat.completions.create({
+    const completionParams = {
       model: "openai/gpt-oss-120b",
       messages: [
-        { role: "system", content: MEETING_CLASSIFICATION_PROMPT },
-        { role: "user", content: `Transcript excerpt:\n${transcript.slice(0, 300)}` },
+        { role: "system" as const, content: MEETING_CLASSIFICATION_PROMPT },
+        { role: "user" as const, content: `Transcript excerpt:\n${transcript.slice(0, 300)}` },
       ],
       temperature: 0.0,
       max_tokens: 32,
-      response_format: { type: "json_object" },
-    }) as any; // eslint-disable-line @typescript-eslint/no-explicit-any
+      response_format: { type: "json_object" as const },
+    };
 
-    const raw = (completion.choices[0]?.message?.content ?? '{"type":"general"}') as string;
+    const completion = await groq.chat.completions.create(
+      completionParams as Parameters<typeof groq.chat.completions.create>[0]
+    );
+
+    const raw = completion.choices[0]?.message?.content ?? '{"type":"general"}';
     const parsed = JSON.parse(raw) as { type?: string };
     const detected = (parsed.type ?? "general") as MeetingType;
     const safe: MeetingType = VALID_TYPES.has(detected) ? detected : "general";

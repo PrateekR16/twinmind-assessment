@@ -1,22 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import Groq from "groq-sdk";
-import { Suggestion } from "@/types";
-
-const MEETING_TYPE_CONTEXT: Record<string, string> = {
-  general:   "General meeting.",
-  technical: "Technical discussion (engineering/architecture/debugging). Prefer FACT_CHECK and ANSWER. Ground suggestions in specific technical claims from the transcript.",
-  interview: "Job interview or hiring discussion. Prefer QUESTION and TALKING_POINT. Focus on probing questions, candidate evaluation, and honest disclosure.",
-  sales:     "Sales call or product demo. Prefer QUESTION and CLARIFICATION. Focus on uncovering objections, qualifying needs, and moving forward.",
-  planning:  "Planning or roadmap session. Prefer TALKING_POINT and CLARIFICATION. Focus on decision criteria, scope, trade-offs, and timeline assumptions.",
-  learning:  "Lecture, tutoring, or study session. Prefer ANSWER and FACT_CHECK. Focus on concept accuracy, depth, and comprehension questions.",
-};
+import { Suggestion, MeetingType } from "@/types";
+import { MEETING_TYPE_CONTEXT } from "@/lib/prompts";
 
 interface SuggestionsBody {
   recentTranscript: string;
   fullTranscript: string;
   previousSuggestions: Pick<Suggestion, "title" | "type">[];
   systemPrompt: string;
-  meetingType?: string;
+  meetingType?: MeetingType;
 }
 
 export async function POST(req: NextRequest) {

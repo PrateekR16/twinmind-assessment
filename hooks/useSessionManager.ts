@@ -112,16 +112,14 @@ export function useSessionManager(settings: SessionSettings): UseSessionManagerR
         if (!text) return;
 
         const chunk: TranscriptChunk = { id: nanoid(), text, timestamp: Date.now() };
+        let shouldClassify = false;
         setTranscriptChunks((prev) => {
           const updated = [...prev, chunk];
           chunksRef.current = updated;
+          if (updated.length === 2) shouldClassify = true;
           return updated;
         });
-
-        const chunkCount = chunksRef.current.length;
-        if (chunkCount === 2) {
-          classifyMeetingRef.current(); // fire-and-forget — non-blocking
-        }
+        if (shouldClassify) classifyMeetingRef.current(); // fire-and-forget — non-blocking
       } catch (err) {
         const detail = err instanceof Error ? err.message : String(err);
         showError("transcription", detail);
